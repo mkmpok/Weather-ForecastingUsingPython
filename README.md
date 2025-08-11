@@ -38,6 +38,7 @@ OPENWEATHER_API_KEY = "YOUR_API_KEY"
 FLASK_SECRET_KEY="Your_key"
 you will get this by typing this in your terminal
 "python -c "import secrets; print(secrets.token_hex(16))""
+NOTE:- put these api keys in file named as ".env"
 
 5)Run the Program=
 python app.py
