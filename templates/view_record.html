@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>View Record</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body class="container py-4">
+  <a href="{{ url_for('records') }}" class="btn btn-link">&larr; Back</a>
+  <h3>Record #{{ rec.id }}</h3>
+  <p><strong>Location:</strong> {{ rec.location_text }} ({{ rec.lat }}, {{ rec.lon }})</p>
+  <p><strong>Date Range:</strong> {{ rec.start_date }} → {{ rec.end_date }}</p>
+
+  <h5>Current</h5>
+  <pre>{{ data.current | tojson(indent=2) }}</pre>
+
+  <h5>Forecast (first 8 entries)</h5>
+  <pre>{{ data.forecast.list[:8] | tojson(indent=2) }}</pre>
+
+  <p>
+    <a class="btn btn-outline-primary" href="#" onclick="openLinks()">Open Maps & YouTube</a>
+  </p>
+
+  <script>
+    async function openLinks(){
+      const res = await fetch("/external_links/{{ rec.id }}");
+      const data = await res.json();
+      window.open(data.maps, "_blank");
+      window.open(data.youtube, "_blank");
+    }
+  </script>
+</body>
+</html>

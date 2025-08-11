@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Weather App - Shraddha Dodke</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Weather App — Shraddha Dodke</h2>
+    <div>
+      <button class="btn btn-info" onclick="alert('PM Accelerator: By making industry-leading tools and education available to individuals from all backgrounds, we level the playing field for future PM leaders. https://www.pmaccelerator.io')">Info</button>
+      <a class="btn btn-secondary" href="{{ url_for('records') }}">Saved Records</a>
+    </div>
+  </div>
+
+  <form method="POST" class="row g-2 mb-3">
+    <div class="col-md-9">
+      <input class="form-control" name="location" placeholder="Enter city, postal code, or 'lat,lon' (e.g., 19.07,72.87)" required>
+    </div>
+    <div class="col-md-3 d-flex">
+      <button class="btn btn-primary me-2" type="submit">Get Weather</button>
+      <button class="btn btn-outline-primary" type="button" onclick="useMyLocation()">Use my location</button>
+    </div>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    async function useMyLocation(){
+      if (!navigator.geolocation) { alert("Geolocation not supported"); return; }
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude, lon = pos.coords.longitude;
+        const res = await fetch("/use-my-location", {
+          method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify({lat,lon})
+        });
+        if (!res.ok){ const err = await res.json(); alert("Error: " + (err.error || "unknown")); return; }
+        const data = await res.json();
+        const w = data.weather;
+        document.getElementById("result").innerHTML = `
+          <div class="card p-3">
+            <h5>${w.name || 'Location'}</h5>
+            <p><strong>${w.main.temp}°C</strong> — ${w.weather[0].description}</p>
+            <img src="https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png"/>
+            <div class="mt-2"><a href="/">Go to home</a></div>
+          </div>`;
+      }, (err) => alert("Geolocation error: " + err.message));
+    }
+  </script>
+</body>
+</html>
