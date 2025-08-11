@@ -1,0 +1,12 @@
+Flask==2.2.5
+Flask_SQLAlchemy==3.0.3
+requests==2.31.0
+python-dotenv==1.0.0
+pandas==2.1.2
+fpdf==1.7.2
+flask requests sqlite3
+geopy geocoder
+flask_sqlalchemy
+python-dotenv
+pandas
+fpdf
